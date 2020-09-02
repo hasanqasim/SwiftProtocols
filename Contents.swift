@@ -62,3 +62,27 @@ struct Tagged: Taggable {
 
 // CONFORMING TO PROTOCOLS VIA EXTENSION
 
+// we want to build a cryptography framework
+// define a single method requirement
+protocol Encrypting {
+    func xor(key: UInt8) -> Self?
+}
+
+// make the string type conform to the protocol
+// use type extension toa dd new properties or methods to an existing type
+
+extension String: Encrypting {
+    func xor(key: UInt8) -> String? {
+        // first retrieve the strings content as a collection of UTF-8 codes
+        // then use map to combine each element with the provided key using the xor opration
+        String(bytes: self.utf8.map {$0 ^ key}, encoding: .utf8)
+    }
+}
+
+// this just enhanced String type with the new cryptography feature
+let target = "Hello, World"
+let result = target.xor(key: 42)
+print(result ?? "encoding failed")
+print(result?.xor(key: 42) ?? "decoding failed")
+
+// type extensions let us add protocols requirements to any type
